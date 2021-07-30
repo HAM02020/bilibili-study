@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/4.1.0/socket.io.js"></script>
+    <style>
+        td {
+            color:#0066FF;
+            font-size: 20px;
+            font-family: 隶书;
+
+        }
+    </style>
+</head>
+<body>
+
+    <table border='1' id='tab'>
+        <tr>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+    </table>
+
+
+    <script type="text/javascript">
+
+        var dataList = ['','','']
+
+        function refresh(){
+            var tab = document.getElementById('tab');
+            for(var i = 0 ; i < 3; i++){
+                tab.rows[i].cells[0].innerText = dataList[i];
+            }
+        }
+
+        function push(data){
+            if(dataList.length < 3){
+                dataList.push(data)
+            }else{
+                dataList[0] = dataList[1];
+                dataList[1] = dataList[2];
+                dataList[2] = data;
+            }
+            refresh()
+        }
+
+        var socket = io('http://1.1.1.1:8082');
+        //socket.emit('sayhi', 'hi');
+        socket.on('connect', (data) =>{
+            //socket.emit('sayhi', 'hi')
+            
+        });
+        socket.on('gmsg',(data)=>{
+            console.log(data);
+            push(data)
+        })
+        // socket.on('message', (data) =>{
+        //     console.log(data);
+        //     document.getElementById('hh').innerText = data
+        // });
+        
+        document.getElementById('send').onclick = ()=>{
+            socket.emit('msg','你好')
+        }
+
+    </script>
+</body>
+</html>
